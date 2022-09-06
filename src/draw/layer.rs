@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use crate::Instruction;
+use crate::{Instruction, Error};
 
 use super::InstructionBox;
 
@@ -20,15 +20,39 @@ impl Layer {
         }
     }
 
-    pub fn undo(&mut self) {
+    pub fn undo(&mut self) -> Result<(), Error> {
         if self.history_index > 0 {
             self.history_index -= 1;
+            Ok(())
+        } else {
+            Err(Error("Cannot undo anymore".to_string()))
         }
     }
 
-    pub fn redo(&mut self) {
+    pub fn redo(&mut self) -> Result<(), Error> {
         if self.history_index < self.history.len() {
             self.history_index += 1;
+            Ok(())
+        } else {
+            Err(Error("Cannot redo anymore".to_string()))
+        }
+    }
+
+    pub fn undo_by(&mut self, by: usize) -> Result<(), Error> {
+        if self.history_index >= by {
+            self.history_index -= by;
+            Ok(())
+        } else {
+            Err(Error("Cannot undo by this much".to_string()))
+        }
+    }
+
+    pub fn redo_by(&mut self, by: usize) -> Result<(), Error> {
+        if self.history_index + by < self.history.len() {
+            self.history_index += by;
+            Ok(())
+        } else {
+            Err(Error("Cannot redo by this much".to_string()))
         }
     }
 

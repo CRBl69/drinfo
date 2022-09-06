@@ -66,15 +66,28 @@ impl Drawing {
         }
     }
 
-    pub fn layer_down(&mut self, name: &str) -> Result<(), Error> {
+    pub fn layer_up_by(&mut self, name: &str, by: usize) -> Result<(), Error> {
         if let Some(index) = self.layer_order.iter().position(|e| e == name) {
-            if index < self.layer_order.len() - 1 {
-                let n2 = self.layer_order[index+1].to_string();
-                self.layer_order[index+1] = name.to_string();
-                self.layer_order[index] = n2;
+            if index + by < self.layer_order.len() {
+                let layer = self.layer_order.remove(index);
+                self.layer_order.insert(index + by, layer);
                 Ok(())
             } else {
-                Err(Error("Layer cannot be moved down, already at the bottom.".to_string()))
+                Err(Error("Layer cannot be moved up this much.".to_string()))
+            }
+        } else {
+            Err(Error("Layer not found.".to_string()))
+        }
+    }
+
+    pub fn layer_down_by(&mut self, name: &str, by: usize) -> Result<(), Error> {
+        if let Some(index) = self.layer_order.iter().position(|e| e == name) {
+            if index >= by {
+                let layer = self.layer_order.remove(index);
+                self.layer_order.insert(index - by, layer);
+                Ok(())
+            } else {
+                Err(Error("Layer cannot be moved down this much.".to_string()))
             }
         } else {
             Err(Error("Layer not found.".to_string()))

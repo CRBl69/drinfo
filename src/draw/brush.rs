@@ -1,5 +1,7 @@
 use serde::{Deserialize, Serialize};
 
+use crate::Point;
+
 use super::Color;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -46,4 +48,13 @@ pub enum BrushType {
     Solid,
     Eraser,
     Brush(usize),
+    Custom(CustomBrush),
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct CustomBrush {
+    /// A collection of collections of points
+    /// which represent shapes. The last point
+    /// is linked to the first.
+    points: Vec<Vec<Point>>,
 }
