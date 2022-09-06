@@ -4,6 +4,7 @@ use serde::{Serialize, Deserialize};
 
 use crate::{ImageInsertion, Motion, Stroke};
 
+/// An instruction.
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub enum Instruction {
     Stroke(Stroke),
@@ -11,6 +12,7 @@ pub enum Instruction {
     ImageInsertion(ImageInsertion)
 }
 
+/// An instruction box.
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct InstructionBox {
     pub instruction: Instruction,

@@ -1,11 +1,17 @@
 use serde::{Deserialize, Serialize};
 
-use super::Point;
+use crate::Point;
 
+/// A motion instruction.
 #[derive(Serialize, Deserialize, Default, Debug, Clone)]
 pub struct Motion {
+    /// The upper left point of where the motion starts.
     pub start: Point,
+    /// The upper left point of where the motion ends.
     pub end: Point,
+    /// The upper left and lower right coordinates of the selection to move.
+    ///
+    /// Not having a selection will move the entire layer.
     pub selection: Option<(Point, Point)>,
 }
 
